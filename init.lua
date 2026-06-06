@@ -120,14 +120,29 @@ vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
 vim.keymap.set("n", "<leader>m", ":MarkdownPreview<CR>", { desc = "Markdown preview" })
 vim.g.mkdp_markdown_css = vim.fn.expand("~/.config/nvim/markdown/preview.css")
 
--- Rust
-vim.env.PATH = vim.env.HOME .. "/.cargo/bin:" .. vim.env.PATH
-
 -- Select word + change all occurrences
 vim.keymap.set("n", "<C-d>", "*Ncgn", { desc = "Select and change next occurrence" })
 
 -- split right a tab
 vim.keymap.set("n", "<leader>r", "<C-w>v", { desc = "Split right" })
+
+-- Enable filetype detection
+vim.filetype.add({
+  pattern = {
+    [".*Makefile.*"] = "make",
+  },
+})
+
+-- Recommended settings for Makefiles
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "make",
+  callback = function()
+    -- Makefiles require real tabs
+    vim.opt_local.expandtab = false
+    vim.opt_local.tabstop = 4
+    vim.opt_local.shiftwidth = 4
+  end,
+})
 
 -- ===============================
 -- Plugin manager: lazy.nvim bootstrap
@@ -387,7 +402,7 @@ require("lazy").setup({
       require("nvim-treesitter.configs").setup({
         ensure_installed = {
           "lua", "go", "python", "javascript", "typescript",
-          "html", "css", "tsx", "json", "markdown", "markdown_inline","rust",
+          "html", "css", "tsx", "json", "markdown", "markdown_inline","make", "svelte"
         },
         sync_install = false,
         auto_install = true,
@@ -477,7 +492,7 @@ require("lazy").setup({
           css             = { "prettier" },
           python          = { "black" },
           go              = { "goimports", "gofumpt" },
-          rust = { "rustfmt" },
+          svelte = { "prettier" },
         },
         default_format_opts = { lsp_format = "fallback" },
         format_on_save      = { timeout_ms = 500 },
@@ -517,7 +532,7 @@ require("lazy").setup({
     opts = {
       ensure_installed = {
         "ts_ls", "pyright", "gopls", "bashls",
-        "jsonls", "html", "cssls", "tailwindcss", "emmet_ls","rust_analyzer",
+        "jsonls", "html", "cssls", "tailwindcss", "emmet_ls","svelte",
       },
       -- automatic_enable replaces the old handlers table (mason-lspconfig v2 / nvim 0.11+)
       automatic_enable = true,
