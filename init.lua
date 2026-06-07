@@ -401,8 +401,8 @@ require("lazy").setup({
       vim.treesitter.language.register("markdown", "mdx")
       require("nvim-treesitter.configs").setup({
         ensure_installed = {
-          "lua", "go", "python", "javascript", "typescript",
-          "html", "css", "tsx", "json", "markdown", "markdown_inline","make", "svelte"
+          "go", "python", "javascript", "typescript",
+          "html", "css", "tsx", "json", "markdown", "markdown_inline","make", "svelte", "vue",
         },
         sync_install = false,
         auto_install = true,
@@ -493,6 +493,7 @@ require("lazy").setup({
           python          = { "black" },
           go              = { "goimports", "gofumpt" },
           svelte = { "prettier" },
+          vue = { "prettier" },
         },
         default_format_opts = { lsp_format = "fallback" },
         format_on_save      = { timeout_ms = 500 },
