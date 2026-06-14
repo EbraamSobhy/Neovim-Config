@@ -33,6 +33,7 @@ vim.opt.undofile   = true
 vim.opt.undodir    = state_dir .. "/undo//"
 vim.opt.backup     = false   -- no .bak files sitting next to your code
 vim.opt.writebackup= false   -- no temporary backup during write
+vim.opt.guicursor = "n-v-c-i-ci-ve-r-cr-o:block"
 
 -- Ensure directories exist
 for _, dir in ipairs({
