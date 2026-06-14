@@ -1,28 +1,21 @@
--- ===============================
---  Neovim Lua Config — Hardened
+--  Neovim Lua Config
 --  Safe for: 0.11+ / 0.12
 --  Security-first, production-ready
--- ===============================
 
--- ===============================
 -- Leader key (before everything)
--- ===============================
 vim.g.mapleader      = " "
 vim.g.maplocalleader = "\\"
 vim.g.mkdp_browser = 'brave'
 
--- ===============================
 -- SECURITY: Disable unsafe built-ins
--- ===============================
 vim.g.loaded_netrw       = 1   -- disable netrw (network file access)
 vim.g.loaded_netrwPlugin = 1
 vim.o.modeline           = false  -- CRITICAL: prevents files from injecting vim commands
 vim.o.modelineexpr       = false  -- extra modeline safety (0.9+)
 vim.o.exrc               = false  -- disable per-project .nvimrc (can be exploited)
 
--- ===============================
 -- SECURITY: Safe file handling
--- ===============================
+
 -- Redirect swap/undo/backup away from project dirs
 -- so they never appear in Git repos or leak secrets
 local state_dir = vim.fn.stdpath("state")
@@ -43,17 +36,13 @@ for _, dir in ipairs({
   vim.fn.mkdir(dir, "p")
 end
 
--- ===============================
 -- UI / Statusline
--- ===============================
 vim.o.laststatus  = 3       -- global statusline
 vim.o.showmode    = true
 vim.o.ruler       = false
 vim.o.winborder   = "none"  -- rounded floats (0.11+, replaces handler overrides)
 
--- ===============================
 -- Terminal title
--- ===============================
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
   pattern  = "*",
   callback = function()
@@ -62,9 +51,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
   end,
 })
 
--- ===============================
 -- General settings
--- ===============================
 vim.opt.number         = true
 vim.opt.relativenumber = true
 vim.opt.tabstop        = 4
@@ -84,9 +71,7 @@ vim.opt.timeoutlen     = 300
 -- Use explicit "+y / "+p instead (keymaps below)
 -- vim.opt.clipboard = "unnamedplus"   <-- intentionally disabled
 
--- ===============================
 -- Keymaps
--- ===============================
 
 -- Clipboard: explicit opt-in only (security-conscious)
 vim.keymap.set("v", "<C-c>",      '"+y',       { desc = "Copy to system clipboard" })
@@ -145,9 +130,7 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- ===============================
 -- Plugin manager: lazy.nvim bootstrap
--- ===============================
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
 -- vim.uv replaces deprecated vim.loop (removed in 0.12)
@@ -161,14 +144,10 @@ if not vim.uv.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- ===============================
 -- Plugins
--- ===============================
 require("lazy").setup({
 
-  -- ----------------------------------------------------------
   -- Theme
-  -- ----------------------------------------------------------
   {
     "Mofiqul/vscode.nvim",
     lazy     = false,
@@ -261,9 +240,7 @@ require("lazy").setup({
   end,
 },
 
-    -- ----------------------------------------------------------
     -- Markdown Preview
-    -- ----------------------------------------------------------
 {
   "iamcco/markdown-preview.nvim",
   cmd      = { "MarkdownPreview", "MarkdownPreviewStop", "MarkdownPreviewToggle" },
@@ -281,9 +258,7 @@ require("lazy").setup({
   end,
 },
 
-  -- ----------------------------------------------------------
   -- File explorer
-  -- ----------------------------------------------------------
 {
   "nvim-tree/nvim-tree.lua",
     dependencies = { "echasnovski/mini.icons" },
@@ -312,9 +287,9 @@ require("lazy").setup({
           padding       = " ",
           symlink_arrow = " ➛ ",
           show = {
-            file         = true,   -- 👈 show file icons like VSCode
-            folder       = true,   -- 👈 show folder icons
-            folder_arrow = true,   -- 👈 show collapse arrow
+            file         = true,   -- show file icons like VSCode
+            folder       = true,   -- show folder icons
+            folder_arrow = true,   -- show collapse arrow
             git          = false,
           },
           glyphs = {
@@ -370,9 +345,7 @@ require("lazy").setup({
     ]])
   end,
 },
-  -- ----------------------------------------------------------
   -- Telescope
-  -- ----------------------------------------------------------
   {
     "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
@@ -391,9 +364,7 @@ require("lazy").setup({
     end,
   },
 
-  -- ----------------------------------------------------------
   -- Treesitter
-  -- ----------------------------------------------------------
   {
     "nvim-treesitter/nvim-treesitter",
     branch = "master",
@@ -413,9 +384,7 @@ require("lazy").setup({
     end,
   },
 
-  -- ----------------------------------------------------------
   -- Completion: blink.cmp
-  -- ----------------------------------------------------------
 {
   "saghen/blink.cmp",
   version      = "1.*",
@@ -449,7 +418,7 @@ require("lazy").setup({
     completion = {
       documentation = { auto_show = true, auto_show_delay_ms = 200 },
       ghost_text    = { enabled = true },
-      -- 👇 this disables the kind icon column entirely
+      -- this disables the kind icon column entirely
       menu = {
         draw = {
           columns = {
@@ -461,9 +430,7 @@ require("lazy").setup({
     signature = { enabled = true },
   },
 },
-  -- ----------------------------------------------------------
   -- Autopairs
-  -- ----------------------------------------------------------
   {
     "windwp/nvim-autopairs",
     event  = "InsertEnter",
@@ -475,9 +442,7 @@ require("lazy").setup({
     end,
   },
 
-  -- ----------------------------------------------------------
   -- Formatting: conform.nvim
-  -- ----------------------------------------------------------
   {
     "stevearc/conform.nvim",
     event  = { "BufWritePre" },
@@ -502,9 +467,7 @@ require("lazy").setup({
     end,
   },
 
-  -- ----------------------------------------------------------
   -- Linting: nvim-lint
-  -- ----------------------------------------------------------
   {
     "mfussenegger/nvim-lint",
     event  = { "BufReadPost", "BufWritePost", "InsertLeave" },
@@ -522,9 +485,7 @@ require("lazy").setup({
     end,
   },
 
-  -- ----------------------------------------------------------
   -- LSP: Mason + mason-lspconfig v2
-  -- ----------------------------------------------------------
   {
     "mason-org/mason-lspconfig.nvim",
     dependencies = {
@@ -541,9 +502,7 @@ require("lazy").setup({
     },
   },
 
-  -- ----------------------------------------------------------
   -- LSP keymaps & attach logic
-  -- ----------------------------------------------------------
   {
     "neovim/nvim-lspconfig",
     config = function()
@@ -577,9 +536,7 @@ require("lazy").setup({
     end,
   },
 
-  -- ----------------------------------------------------------
   -- Extras — all from well-known, audited sources
-  -- ----------------------------------------------------------
   { "maxmellon/vim-jsx-pretty",  ft = { "javascriptreact", "typescriptreact" } },
 
   {
@@ -594,11 +551,9 @@ require("lazy").setup({
     config = function() require("Comment").setup() end,
   },
 
-  -- ----------------------------------------------------------
   -- Auto-save: debounced, modifiable-only
   -- NOTE: debounce raised to 1000ms to avoid writing half-edited
   -- secrets or broken syntax to disk on every keystroke
-  -- ----------------------------------------------------------
   {
     "Pocco81/auto-save.nvim",
     config = function()
@@ -629,9 +584,7 @@ require("lazy").setup({
   },
 
 }, {
-  -- ----------------------------------------------------------
   -- lazy.nvim itself: hardened options
-  -- ----------------------------------------------------------
   checker = {
     enabled = true,   -- notify on plugin updates (security patches)
     notify  = true,
@@ -641,9 +594,7 @@ require("lazy").setup({
   },
 })
 
--- ===============================
 -- Custom highlights (after Lazy)
--- ===============================
 vim.api.nvim_create_autocmd("ModeChanged", {
   pattern  = "*",
   callback = function()
