@@ -374,7 +374,7 @@ require("lazy").setup({
       require("nvim-treesitter.configs").setup({
         ensure_installed = {
           "go", "python", "javascript", "typescript",
-          "html", "css", "tsx", "json", "markdown", "markdown_inline","make", "svelte", "vue",
+          "html", "css", "tsx", "json", "markdown", "markdown_inline","make", "svelte", "vue","rust",
         },
         sync_install = false,
         auto_install = true,
@@ -460,6 +460,7 @@ require("lazy").setup({
           go              = { "goimports", "gofumpt" },
           svelte = { "prettier" },
           vue = { "prettier" },
+          rust = { "rustfmt" },
         },
         default_format_opts = { lsp_format = "fallback" },
         format_on_save      = { timeout_ms = 500 },
@@ -495,7 +496,7 @@ require("lazy").setup({
     opts = {
       ensure_installed = {
         "ts_ls", "pyright", "gopls", "bashls",
-        "jsonls", "html", "cssls", "tailwindcss", "emmet_ls","svelte",
+        "jsonls", "html", "cssls", "tailwindcss", "emmet_ls","svelte","rust","rust_analyzer",
       },
       -- automatic_enable replaces the old handlers table (mason-lspconfig v2 / nvim 0.11+)
       automatic_enable = true,
