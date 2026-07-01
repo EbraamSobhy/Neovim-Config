@@ -51,6 +51,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
   end,
 })
 
+
 -- General settings
 vim.opt.number         = true
 vim.opt.relativenumber = true
@@ -111,6 +112,11 @@ vim.keymap.set("n", "<C-d>", "*Ncgn", { desc = "Select and change next occurrenc
 
 -- split right a tab
 vim.keymap.set("n", "<leader>r", "<C-w>v", { desc = "Split right" })
+
+-- Open current directory in GUI file manager
+vim.api.nvim_create_user_command("Files", function()
+  vim.fn.jobstart({ "nautilus", "." }, { detach = true })
+end, {})
 
 -- Enable filetype detection
 vim.filetype.add({
@@ -384,7 +390,7 @@ require("lazy").setup({
     end,
   },
 
-  -- Completion: blink.cmp
+  -- Completion
 {
   "saghen/blink.cmp",
   version      = "1.*",
