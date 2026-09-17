@@ -101,9 +101,25 @@ end, {})
 
 -- Enable filetype detection
 vim.filetype.add({
-  pattern = { [".*Makefile.*"] = "make" },
+  pattern = {
+    [".*Makefile.*"] = "make",
+    [".*%.rake"]      = "ruby",
+    ["Gemfile"]       = "ruby",
+    ["Rakefile"]      = "ruby",
+    [".*%.jbuilder"]  = "ruby",
+  },
+  extension = {
+    erb = "eruby",
+    blade = "blade",
+  },
 })
 
+-- Laravel's `.blade.php` double-extension needs a pattern match, not just `extension`:
+vim.filetype.add({
+  pattern = {
+    [".*%.blade%.php"] = "blade",
+  },
+})
 -- Recommended settings for Makefiles (real tabs required)
 vim.api.nvim_create_autocmd("FileType", {
   pattern  = "make",
@@ -356,7 +372,7 @@ require("lazy").setup({
       local parsers = {
         "go", "python", "javascript", "typescript",
         "html", "css", "tsx", "json", "markdown", "markdown_inline",
-        "make", "svelte", "vue", "rust", "lua", "vim", "vimdoc", "bash",
+        "make", "svelte", "vue", "rust", "lua", "vim", "vimdoc", "bash","ruby","blade", "php",
       }
       require("nvim-treesitter").install(parsers)
 
@@ -446,6 +462,8 @@ require("lazy").setup({
           python          = { "black" },
           go              = { "goimports", "gofumpt" },
           rust            = { "rustfmt" },
+          ruby            = { "rubocop" },
+          php             = { "pint" },
         },
         default_format_opts = { lsp_format = "fallback" },
         format_on_save       = { timeout_ms = 500 },
@@ -464,6 +482,8 @@ require("lazy").setup({
         javascriptreact = { "eslint_d" },
         typescript      = { "eslint_d" },
         typescriptreact = { "eslint_d" },
+        ruby            = { "rubocop" },
+        php             = { "phpstan" },
       }
       vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
         callback = function() lint.try_lint() end,
@@ -485,7 +505,7 @@ require("lazy").setup({
       ensure_installed = {
         "ts_ls", "pyright", "gopls", "bashls",
         "jsonls", "html", "cssls", "tailwindcss", "emmet_ls",
-        "svelte", "rust_analyzer",
+        "svelte", "rust_analyzer","ruby_lsp","intelephense"
       },
       automatic_enable = true, -- replaces the old handlers table (mason-lspconfig v2 / nvim 0.11+)
     },
@@ -569,6 +589,25 @@ require("lazy").setup({
         debounce_delay    = 1000,
       })
     end,
+  },
+
+  -- Laravel
+  {
+    "adalessa/laravel.nvim",
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+      "tpope/vim-dotenv",
+      "MunifTanjim/nui.nvim",
+      "nvim-neotest/nvim-nio",
+    },
+    cmd = { "Laravel" },
+    keys = {
+      { "<leader>la", ":Laravel artisan<cr>" },
+      { "<leader>lr", ":Laravel routes<cr>" },
+      { "<leader>lm", ":Laravel related<cr>" },
+    },
+    event = { "VeryLazy" },
+    config = true,
   },
 
 }, {
