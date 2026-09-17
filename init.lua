@@ -103,13 +103,8 @@ end, {})
 vim.filetype.add({
   pattern = {
     [".*Makefile.*"] = "make",
-    [".*%.rake"]      = "ruby",
-    ["Gemfile"]       = "ruby",
-    ["Rakefile"]      = "ruby",
-    [".*%.jbuilder"]  = "ruby",
   },
   extension = {
-    erb = "eruby",
     blade = "blade",
   },
 })
@@ -372,7 +367,7 @@ require("lazy").setup({
       local parsers = {
         "go", "python", "javascript", "typescript",
         "html", "css", "tsx", "json", "markdown", "markdown_inline",
-        "make", "svelte", "vue", "rust", "lua", "vim", "vimdoc", "bash","ruby","blade", "php",
+        "make", "svelte", "vue", "rust", "lua", "vim", "vimdoc", "bash","blade", "php",
       }
       require("nvim-treesitter").install(parsers)
 
@@ -462,7 +457,6 @@ require("lazy").setup({
           python          = { "black" },
           go              = { "goimports", "gofumpt" },
           rust            = { "rustfmt" },
-          ruby            = { "rubocop" },
           php             = { "pint" },
         },
         default_format_opts = { lsp_format = "fallback" },
@@ -482,7 +476,6 @@ require("lazy").setup({
         javascriptreact = { "eslint_d" },
         typescript      = { "eslint_d" },
         typescriptreact = { "eslint_d" },
-        ruby            = { "rubocop" },
         php             = { "phpstan" },
       }
       vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
@@ -505,7 +498,7 @@ require("lazy").setup({
       ensure_installed = {
         "ts_ls", "pyright", "gopls", "bashls",
         "jsonls", "html", "cssls", "tailwindcss", "emmet_ls",
-        "svelte", "rust_analyzer","ruby_lsp","intelephense"
+        "svelte", "rust_analyzer","intelephense"
       },
       automatic_enable = true, -- replaces the old handlers table (mason-lspconfig v2 / nvim 0.11+)
     },
